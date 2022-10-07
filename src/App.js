@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+// Iniciando o projeto group-3-release
+
 function App() {
   return (
     <div className="App">
