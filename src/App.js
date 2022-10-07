@@ -1,13 +1,14 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
-
-// Iniciando o projeto group-3-release
+import Home from './pages/Home';
 
 class App extends React.Component {
   render() {
     return (
-      <BrowserRouter />
+      <BrowserRouter>
+        <Route path="/" component={ Home } />
+      </BrowserRouter>
     );
   }
 }
