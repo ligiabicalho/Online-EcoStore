@@ -1,6 +1,6 @@
 import React from 'react';
 import ButtonShoppingCart from '../components/ButtonShoppingCart';
-import { getCategories } from '../services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
   state = {
@@ -18,12 +18,40 @@ class Home extends React.Component {
     });
   };
 
+  handleSearchChange = ({ target }) => {
+    const { value } = target;
+    this.setState({
+      search: value,
+    });
+  };
+
+  onSearchClick = async () => {
+    const { search } = this.state;
+    const request = await getProductsFromCategoryAndQuery(search);
+    const { results } = request;
+    this.setState({
+      results,
+    });
+  };
+
   render() {
-    const { categories } = this.state;
+    const { categories, results } = this.state;
     return (
       <>
         <label htmlFor="search">
-          <input type="text" id="search" />
+          <input
+            data-testid="query-input"
+            type="text"
+            id="search"
+            onChange={ this.handleSearchChange }
+          />
+          <button
+            type="button"
+            data-testid="query-button"
+            onClick={ this.onSearchClick }
+          >
+            Pesquisar
+          </button>
           <p
             data-testid="home-initial-message"
           >
@@ -31,7 +59,7 @@ class Home extends React.Component {
           </p>
           <ButtonShoppingCart />
         </label>
-        <div>
+        <aside>
           {categories.map((category) => (
             <li key={ category.id }>
               <label htmlFor={ category.id }>
@@ -45,7 +73,26 @@ class Home extends React.Component {
               </label>
             </li>
           ))}
-        </div>
+        </aside>
+        <section className="result-content">
+          { results !== undefined
+            ? (
+              <ul>
+                {results.map((result) => (
+                  <li
+                    key={ result.id }
+                    data-testid="product"
+                  >
+                    <p>{ result.title }</p>
+                    <img src={ result.thumbnail } alt={ result.title } />
+                    <p>
+                      { result.price }
+                    </p>
+                  </li>))}
+              </ul>
+            )
+            : <p>Nenhum produto foi encontrado</p>}
+        </section>
       </>
 
     );
