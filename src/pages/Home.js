@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 
@@ -31,7 +32,7 @@ class Home extends React.Component {
     const { search } = this.state;
     const request = await getProductsFromCategoryAndQuery(undefined, search);
     const { results } = request;
-    console.log(request);
+
     this.setState({
       results,
     });
@@ -104,6 +105,17 @@ class Home extends React.Component {
                     <p>
                       { result.price }
                     </p>
+                    <Link
+                      data-testid="product-detail-link"
+                      to={ `/details/${result.id}` }
+                    >
+                      <button
+                        data-testid="shopping-cart-button"
+                        type="button"
+                      >
+                        Detalhes
+                      </button>
+                    </Link>
                   </li>))}
               </ul>
             )
