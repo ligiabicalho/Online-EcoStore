@@ -4,7 +4,7 @@ import { getCategories, getProductsFromCategoryAndQuery } from '../services/api'
 
 class Home extends React.Component {
   state = {
-    categories: [],
+    listCategories: [],
   };
 
   componentDidMount() {
@@ -12,22 +12,35 @@ class Home extends React.Component {
   }
 
   handleGetCategories = async () => {
-    const categories = await getCategories();
+    const listCategories = await getCategories();
     this.setState({
-      categories,
+      listCategories,
     });
   };
 
   handleSearchChange = ({ target }) => {
-    const { value } = target;
+    const { value, name } = target;
+    console.log(value);
+    console.log(name);
     this.setState({
-      search: value,
+      [name]: value,
     });
   };
 
   onSearchClick = async () => {
     const { search } = this.state;
-    const request = await getProductsFromCategoryAndQuery(search);
+    const request = await getProductsFromCategoryAndQuery(undefined, search);
+    const { results } = request;
+    console.log(request);
+    this.setState({
+      results,
+    });
+  };
+
+  onClickCategory = async ({ target }) => {
+    const { value, name } = target;
+    this.setState({ [name]: value });
+    const request = await getProductsFromCategoryAndQuery(value);
     const { results } = request;
     this.setState({
       results,
@@ -35,7 +48,7 @@ class Home extends React.Component {
   };
 
   render() {
-    const { categories, results } = this.state;
+    const { listCategories, results } = this.state;
     return (
       <>
         <label htmlFor="search">
@@ -43,6 +56,7 @@ class Home extends React.Component {
             data-testid="query-input"
             type="text"
             id="search"
+            name="search"
             onChange={ this.handleSearchChange }
           />
           <button
@@ -60,14 +74,16 @@ class Home extends React.Component {
           <ButtonShoppingCart />
         </label>
         <aside>
-          {categories.map((category) => (
+          {listCategories.map((category) => (
             <li key={ category.id }>
               <label htmlFor={ category.id }>
                 <input
                   id={ category.id }
+                  value={ category.id }
                   name="category"
                   type="radio"
                   data-testid="category"
+                  onClick={ this.onClickCategory }
                 />
                 {category.name}
               </label>
