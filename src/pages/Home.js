@@ -33,6 +33,7 @@ class Home extends React.Component {
     const { search } = this.state;
     const request = await getProductsFromCategoryAndQuery(undefined, search);
     const { results } = request;
+    console.log(results);
 
     this.setState({
       results,
