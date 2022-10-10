@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ButtonShoppingCart from '../components/ButtonShoppingCart';
+import ButtonShoppingCart from './ButtonShoppingCart';
 import { getProductById } from '../services/api';
 
 class Details extends React.Component {
