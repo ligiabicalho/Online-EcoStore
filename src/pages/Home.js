@@ -5,6 +5,7 @@ import { getCategories, getProductsFromCategoryAndQuery } from '../services/api'
 class Home extends React.Component {
   state = {
     listCategories: [],
+    shoppingCart: [],
   };
 
   componentDidMount() {
@@ -35,6 +36,27 @@ class Home extends React.Component {
     this.setState({
       results,
     });
+  };
+
+  handleAddCart = ({ target }) => {
+    const { value } = target;
+    // const { shoppingCart } = this.state;
+    this.setState((prevState) => ({
+      shoppingCart: [...prevState.shoppingCart, value],
+    }), () => this.addCartLocalStorage());
+  };
+
+  saveShoppingCart = (shoppingCart) => localStorage
+    .setItem('shopping_cart', JSON.stringify(shoppingCart));
+
+  addCartLocalStorage = () => {
+    const { shoppingCart } = this.state;
+    // if (!JSON.parse(localStorage.getItem('shopping_cart'))) {
+    //   localStorage.setItem('shopping_cart', JSON.stringify([]));
+    // }
+    // const readShoppingCart = () => JSON.parse(localStorage.getItem('shopping_cart'));
+    // const productsShoppingCart = readShoppingCart();
+    this.saveShoppingCart(shoppingCart);
   };
 
   onClickCategory = async ({ target }) => {
@@ -104,6 +126,15 @@ class Home extends React.Component {
                     <p>
                       { result.price }
                     </p>
+                    <button
+                      type="button"
+                      name="shoppingCart"
+                      value={ result.id }
+                      data-testid="product-add-to-cart"
+                      onClick={ this.handleAddCart }
+                    >
+                      Adicionar ao carrinho
+                    </button>
                   </li>))}
               </ul>
             )
