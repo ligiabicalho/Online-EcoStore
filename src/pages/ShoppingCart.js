@@ -26,6 +26,7 @@ class ShoppingCart extends React.Component {
           ? (
             <ul>
               {shoppingCart.map((product, i) => (
+                // (shoppingCart.filter((p) => p.id !== product.id
                 <li
                   key={ i }
                   data-testid="shopping-cart-product-name"
