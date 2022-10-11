@@ -5,6 +5,7 @@ import ButtonShoppingCart from '../components/ButtonShoppingCart';
 // import { handleAddCart } from './Home';
 import { getProductById } from '../services/api';
 import CardProduct from '../components/CardProduct';
+import { addProduct } from '../services/localstorage';
 
 class Details extends React.Component {
   state = {
@@ -23,18 +24,22 @@ class Details extends React.Component {
     });
   };
 
+  handleAddCart = (result) => {
+    addProduct(result); // Add Local Storage
+    // this.handleGetShoppingCart(); // Após add, chama a função p/ receber a lista do Cart e add no state.
+  };
+
   render() {
     const { result } = this.state;
     return (
       <div>
         <CardProduct
+          dataTestId="product-detail-add-to-cart"
           title={ result.title }
           thumbnail={ result.thumbnail }
           price={ result.price }
           id={ result.id }
-          value={ result }
-          // attributes={ result.attributes }
-          handleAddCart={ this.handleAddCart }
+          handleAddCart={ () => this.handleAddCart(result) }
         />
         <ButtonShoppingCart />
       </div>
