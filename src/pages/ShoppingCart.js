@@ -18,7 +18,16 @@ class ShoppingCart extends React.Component {
     });
   };
 
-  handleAddProduct = (product) => {
+  handleIncrease = (product) => {
+    removeProduct(product);
+    product.quantity += 1;
+    addProduct(product);
+    this.handleGetShoppingCart();
+  };
+
+  handleDecrease = (product) => {
+    removeProduct(product);
+    product.quantity -= 1;
     addProduct(product);
     this.handleGetShoppingCart();
   };
@@ -46,22 +55,21 @@ class ShoppingCart extends React.Component {
                     thumbnail={ product.thumbnail }
                     price={ product.price }
                     id={ product.id }
-                    // handleAddCart={ handleAddCart }
                   />
                   <button
                     type="button"
                     data-testid="product-increase-quantity"
-                    onClick={ () => this.handleAddProduct(product) }
+                    onClick={ () => this.handleIncrease(product) }
                   >
                     +
                   </button>
                   <button
                     type="button"
                     data-testid="product-decrease-quantity"
-                    disabled={
-                      shoppingCart.filter((p) => p.id === product.id).length === 1
-                    }
-                    //onClick={ () =>  }
+                    // disabled={
+                    //   shoppingCart.filter((p) => p.id === product.id).length === 1
+                    // }
+                    onClick={ () => this.handleDecrease(product) }
                   >
                     -
                   </button>
@@ -75,7 +83,7 @@ class ShoppingCart extends React.Component {
                   <p
                     data-testid="shopping-cart-product-quantity"
                   >
-                    {shoppingCart.filter((p) => p.id === product.id).length}
+                    {shoppingCart.find((p) => p.id === product.id).quantity}
                   </p>
                 </li>))}
             </ul>

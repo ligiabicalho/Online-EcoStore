@@ -18,13 +18,15 @@ class CardProduct extends React.Component {
         <p data-testid="product-detail-price">
           { price }
         </p>
-        <Link // Colocar uma renderização condicional?
-          data-testid="product-detail-link"
-          to={ `/details/${id}` }
-        >
-          Detalhes
-        </Link>
-        <br />
+        { (dataTestId === 'product-add-to-cart')
+        && (
+          <Link
+            data-testid="product-detail-link"
+            to={ `/details/${id}` }
+          >
+            Detalhes
+          </Link>
+        )}
         <button
           type="button"
           name="addCart"
