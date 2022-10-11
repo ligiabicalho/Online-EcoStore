@@ -33,13 +33,15 @@ class Home extends React.Component {
 
   onSearchClick = async () => {
     const { search } = this.state;
-    const request = await getProductsFromCategoryAndQuery(undefined, search);
-    const { results } = request;
-    console.log(results);
+    if (search) {
+      const request = await getProductsFromCategoryAndQuery(undefined, search);
+      const { results } = request;
+      console.log(results);
 
-    this.setState({
-      results,
-    });
+      this.setState({
+        results,
+      });
+    }
   };
 
   handleAddCart = (result) => {
