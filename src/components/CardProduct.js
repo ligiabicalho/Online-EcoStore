@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 class CardProduct extends React.Component {
   render() {
-    const { title, thumbnail, price, id, value, handleAddCart } = this.props;
+    const { title, thumbnail, price, id, value, handleAddCart, dataTestId } = this.props;
     return (
       <div className="card-product">
         <p data-testid="product-detail-name">{ title }</p>
@@ -29,7 +29,7 @@ class CardProduct extends React.Component {
           type="button"
           name="addCart"
           value={ value }
-          data-testid="product-add-to-cart"
+          data-testid={ dataTestId }
           onClick={ handleAddCart }
         >
           Adicionar ao carrinho
@@ -45,6 +45,7 @@ CardProduct.propTypes = {
   price: PropTypes.string,
   id: PropTypes.string,
   value: PropTypes.object,
+  dataTestId: PropTypes.string,
   // attributes: PropTypes.arrayOf,
   // match: PropTypes.shape({
   //   params: PropTypes.shape({
