@@ -39,8 +39,6 @@ class Details extends React.Component {
           thumbnail={ result.thumbnail }
           price={ result.price }
           id={ result.id }
-          value={ result }
-          // attributes={ result.attributes }
           handleAddCart={ () => this.handleAddCart(result) }
         />
         <ButtonShoppingCart />

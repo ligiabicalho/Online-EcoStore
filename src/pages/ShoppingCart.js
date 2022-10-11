@@ -36,8 +36,6 @@ class ShoppingCart extends React.Component {
                     thumbnail={ product.thumbnail }
                     price={ product.price }
                     id={ product.id }
-                    value={ product }
-                    attributes={ product.attributes }
                     // handleAddCart={ handleAddCart }
                   />
                   <p

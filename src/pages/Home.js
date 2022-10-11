@@ -116,12 +116,11 @@ class Home extends React.Component {
                     data-testid="product"
                   >
                     <CardProduct
+                      dataTestId="product-add-to-cart"
                       title={ result.title }
                       thumbnail={ result.thumbnail }
                       price={ result.price }
                       id={ result.id }
-                      // value={ result }
-                      // attributes={ result.attributes }
                       handleAddCart={ () => this.handleAddCart(result) }
                     />
                   </li>))}
