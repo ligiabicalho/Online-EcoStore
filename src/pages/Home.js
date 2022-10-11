@@ -22,6 +22,8 @@ class Home extends React.Component {
 
   handleSearchChange = ({ target }) => {
     const { value, name } = target;
+    console.log(value);
+    console.log(name);
     this.setState({
       [name]: value,
     });
@@ -29,13 +31,13 @@ class Home extends React.Component {
 
   onSearchClick = async () => {
     const { search } = this.state;
-    if (search) { // Se algo for pesquisado (search = true), faz a requisição do termo.
-      const request = await getProductsFromCategoryAndQuery(undefined, search);
-      const { results } = request;
-      this.setState({
-        results,
-      });
-    }
+    const request = await getProductsFromCategoryAndQuery(undefined, search);
+    const { results } = request;
+    console.log(results);
+
+    this.setState({
+      results,
+    });
   };
 
   handleAddCart = ({ target }) => {
