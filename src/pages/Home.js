@@ -1,12 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import CardProduct from '../components/CardProduct';
+// import Details from './Details';
+import { addProduct } from '../services/localstorage';
 
 class Home extends React.Component {
   state = {
     listCategories: [],
-    shoppingCart: [],
   };
 
   componentDidMount() {
@@ -38,25 +40,16 @@ class Home extends React.Component {
     }
   };
 
-  handleAddCart = ({ target }) => {
-    const { value } = target;
-    // const { shoppingCart } = this.state;
-    this.setState((prevState) => ({
-      shoppingCart: [...prevState.shoppingCart, value],
-    }), () => this.addCartLocalStorage());
-  };
+  // handleGetShoppingCart = () => {
+  //   const shoppingCart = getShoppingCart();
+  //   this.setState({
+  //     shoppingCart,
+  //   });
+  // };
 
-  saveShoppingCart = (shoppingCart) => localStorage
-    .setItem('shopping_cart', JSON.stringify(shoppingCart));
-
-  addCartLocalStorage = () => {
-    const { shoppingCart } = this.state;
-    // if (!JSON.parse(localStorage.getItem('shopping_cart'))) {
-    //   localStorage.setItem('shopping_cart', JSON.stringify([]));
-    // }
-    // const readShoppingCart = () => JSON.parse(localStorage.getItem('shopping_cart'));
-    // const productsShoppingCart = readShoppingCart();
-    this.saveShoppingCart(shoppingCart);
+  handleAddCart = (result) => {
+    addProduct(result); // Add Local Storage
+    // this.handleGetShoppingCart(); // Após add, chama a função p/ receber a lista do Cart e add no state.
   };
 
   onClickCategory = async ({ target }) => {
@@ -74,6 +67,11 @@ class Home extends React.Component {
     return (
       <>
         <label htmlFor="search">
+          <p
+            data-testid="home-initial-message"
+          >
+            Digite algum termo de pesquisa ou escolha uma categoria.
+          </p>
           <input
             data-testid="query-input"
             type="text"
@@ -88,13 +86,9 @@ class Home extends React.Component {
           >
             Pesquisar
           </button>
-          <p
-            data-testid="home-initial-message"
-          >
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </p>
-          <ButtonShoppingCart />
         </label>
+        <br />
+        <ButtonShoppingCart />
         <aside>
           {listCategories.map((category) => (
             <li key={ category.id }>
@@ -121,31 +115,15 @@ class Home extends React.Component {
                     key={ result.id }
                     data-testid="product"
                   >
-                    <p>{ result.title }</p>
-                    <img src={ result.thumbnail } alt={ result.title } />
-                    <p>
-                      { result.price }
-                    </p>
-                    <Link
-                      data-testid="product-detail-link"
-                      to={ `/details/${result.id}` }
-                    >
-                      <button
-                        data-testid="shopping-cart-button"
-                        type="button"
-                      >
-                        Detalhes
-                      </button>
-                    </Link>
-                    <button
-                      type="button"
-                      name="shoppingCart"
-                      value={ result.id }
-                      data-testid="product-add-to-cart"
-                      onClick={ this.handleAddCart }
-                    >
-                      Adicionar ao carrinho
-                    </button>
+                    <CardProduct
+                      title={ result.title }
+                      thumbnail={ result.thumbnail }
+                      price={ result.price }
+                      id={ result.id }
+                      // value={ result }
+                      // attributes={ result.attributes }
+                      handleAddCart={ () => this.handleAddCart(result) }
+                    />
                   </li>))}
               </ul>
             )
