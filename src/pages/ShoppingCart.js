@@ -13,7 +13,6 @@ class ShoppingCart extends React.Component {
 
   handleGetShoppingCart = () => {
     const shoppingCart = getShoppingCart();
-    // console.log(shoppingCart);
     this.setState({
       shoppingCart,
     });
@@ -27,7 +26,6 @@ class ShoppingCart extends React.Component {
           ? (
             <ul>
               {shoppingCart.map((product, i) => (
-
                 <li
                   key={ i }
                   data-testid="shopping-cart-product-name"
