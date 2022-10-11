@@ -1,6 +1,6 @@
 import React from 'react';
 import CardProduct from '../components/CardProduct';
-import { getShoppingCart } from '../services/localstorage';
+import { getShoppingCart, addProduct, removeProduct } from '../services/localstorage';
 
 class ShoppingCart extends React.Component {
   state = {
@@ -16,6 +16,16 @@ class ShoppingCart extends React.Component {
     this.setState({
       shoppingCart,
     });
+  };
+
+  handleAddProduct = (product) => {
+    addProduct(product);
+    this.handleGetShoppingCart();
+  };
+
+  handleRemoveProduct = (product) => {
+    removeProduct(product);
+    this.handleGetShoppingCart();
   };
 
   render() {
@@ -38,6 +48,30 @@ class ShoppingCart extends React.Component {
                     id={ product.id }
                     // handleAddCart={ handleAddCart }
                   />
+                  <button
+                    type="button"
+                    data-testid="product-increase-quantity"
+                    onClick={ () => this.handleAddProduct(product) }
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="product-decrease-quantity"
+                    disabled={
+                      shoppingCart.filter((p) => p.id === product.id).length === 1
+                    }
+                    //onClick={ () =>  }
+                  >
+                    -
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="remove-product"
+                    onClick={ () => this.handleRemoveProduct(product) }
+                  >
+                    Remover Produto
+                  </button>
                   <p
                     data-testid="shopping-cart-product-quantity"
                   >
