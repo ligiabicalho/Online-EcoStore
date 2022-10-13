@@ -19,7 +19,10 @@ class ShoppingCart extends React.Component {
   };
 
   handleIncrease = (product) => {
+    removeProduct(product);
     product.quantity += 1;
+    addProduct(product);
+    this.handleGetShoppingCart();
   };
 
   handleDecrease = (product) => {
@@ -47,15 +50,18 @@ class ShoppingCart extends React.Component {
                   data-testid="shopping-cart-product-name"
                 >
                   <CardProduct
+                    dataTestId="shopping-cart-product-quantity"
                     title={ product.title }
                     thumbnail={ product.thumbnail }
                     price={ product.price }
                     id={ product.id }
+                    // handleIncrease={ this.handleIncrease(product) }
+                    // handleDecrease={ this.handleDecrease(product) }
                   />
                   <button
                     type="button"
                     data-testid="product-increase-quantity"
-                    onClick={ () => this.handleIncrease(product) }
+                    onClick={ () => this.handleIncrease() }
                   >
                     +
                   </button>
