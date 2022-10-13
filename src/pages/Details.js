@@ -57,10 +57,8 @@ class Details extends React.Component {
     const { email, text, rating } = this.state;
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
     // const emailRegex = /@.*\./i;
-    console.log('regex =>', emailRegex.test(email));
-    const validText = text.length > 0;
     const validRating = rating > 0;
-    if (emailRegex.test(email) && validText && validRating) {
+    if (emailRegex.test(email) && validRating) {
       const evaluation = {
         email,
         text,
@@ -77,9 +75,6 @@ class Details extends React.Component {
     } else {
       this.setState({
         validation: false,
-        email: '',
-        text: '',
-        rating: 0,
       });
     }
   };
