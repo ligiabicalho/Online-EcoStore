@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getProductById } from '../services/api';
 import CardProduct from '../components/CardProduct';
-import { addProduct, getShoppingCart, removeProduct } from '../services/localstorage';
+import { addEvaluation, addProduct,
+  getEvaluationList, getShoppingCart, removeProduct } from '../services/localstorage';
 import '../styles/Details.css';
 
 class Details extends React.Component {
@@ -12,17 +13,21 @@ class Details extends React.Component {
     email: '',
     text: '',
     rating: 0,
+    validation: true,
+    evaluationList: [],
   };
 
   componentDidMount() {
-    this.renderProduct();
+    this.renderProductandEvaluation();
   }
 
-  renderProduct = async () => {
+  renderProductandEvaluation = async () => {
     const { match: { params: { id } } } = this.props;
     const request = await getProductById(id);
+    const evaluationList = getEvaluationList(id);
     this.setState({
       result: request,
+      evaluationList,
     });
   };
 
@@ -48,24 +53,40 @@ class Details extends React.Component {
     });
   };
 
-  validationInputs = () => {
+  validationInputs = (productId) => {
     const { email, text, rating } = this.state;
-    const validEmail = email.length > 0;
+    const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
+    // const emailRegex = /@.*\./i;
+    console.log('regex =>', emailRegex.test(email));
     const validText = text.length > 0;
     const validRating = rating > 0;
-    if (validEmail && validText && validRating) {
+    if (emailRegex.test(email) && validText && validRating) {
+      const evaluation = {
+        email,
+        text,
+        rating,
+      };
+      addEvaluation(productId, evaluation);
       this.setState({
         validation: true,
+        email: '',
+        text: '',
+        rating: 0,
+        evaluationList: getEvaluationList(productId),
       });
     } else {
       this.setState({
         validation: false,
+        email: '',
+        text: '',
+        rating: 0,
       });
     }
   };
 
   render() {
-    const { result, validation, email, text, rating } = this.state;
+    const { result, validation, email, text, evaluationList } = this.state;
+    // console.log(email);
     return (
       <div>
         <CardProduct
@@ -78,14 +99,17 @@ class Details extends React.Component {
         />
         <ButtonShoppingCart />
         <form>
-          <label htmlFor="email" data-testid="product-detail-email">
+          <label htmlFor="email">
             Digite seu e-mail:
             <input
               id="email"
               type="email"
               name="email"
+              value={ email }
               placeholder="digite seu e-mail"
+              data-testid="product-detail-email"
               onChange={ this.handleOnChange }
+              required
             />
           </label>
           <br />
@@ -97,6 +121,7 @@ class Details extends React.Component {
                 name="rating"
                 value="1"
                 onChange={ this.handleOnChange }
+                required
               />
               <span className="icon">★</span>
             </label>
@@ -107,6 +132,7 @@ class Details extends React.Component {
                 name="rating"
                 value="2"
                 onChange={ this.handleOnChange }
+                required
               />
               <span className="icon">★</span>
               <span className="icon">★</span>
@@ -118,6 +144,7 @@ class Details extends React.Component {
                 name="rating"
                 value="3"
                 onChange={ this.handleOnChange }
+                required
               />
               <span className="icon">★</span>
               <span className="icon">★</span>
@@ -130,6 +157,7 @@ class Details extends React.Component {
                 name="rating"
                 value="4"
                 onChange={ this.handleOnChange }
+                required
               />
               <span className="icon">★</span>
               <span className="icon">★</span>
@@ -143,6 +171,7 @@ class Details extends React.Component {
                 name="rating"
                 value="5"
                 onChange={ this.handleOnChange }
+                required
               />
               <span className="icon">★</span>
               <span className="icon">★</span>
@@ -152,12 +181,14 @@ class Details extends React.Component {
             </label>
           </div>
           <br />
-          <label htmlFor="evaluation" data-testid="product-detail-evaluation">
+          <label htmlFor="evaluation">
             Dê a sua avaliação sobre o produto:
             <input
               id="evaluation"
               type="textarea"
               name="text"
+              value={ text }
+              data-testid="product-detail-evaluation"
               placeholder="digite sua avaliação"
               onChange={ this.handleOnChange }
             />
@@ -166,18 +197,22 @@ class Details extends React.Component {
           <button
             type="button"
             data-testid="submit-review-btn"
-            onClick={ this.validationInputs }
+            onClick={ () => this.validationInputs(result.id) }
           >
             Enviar
           </button>
-          {validation
-            ? (
-              <>
-                <p data-testid="review-card-email">{email}</p>
-                <p data-testid="review-card-evaluation">{text}</p>
-                <p data-testid="review-card-rating">{rating}</p>
-              </>)
-            : <p data-testid="error-msg">Campos inválidos</p>}
+          {!validation && <p data-testid="error-msg">Campos inválidos</p>}
+          <ul>
+            {
+              (evaluationList)
+                && evaluationList.map((evaluation, i) => (
+                  <li key={ i }>
+                    <p data-testid="review-card-email">{evaluation.email}</p>
+                    <p data-testid="review-card-evaluation">{evaluation.text}</p>
+                    <p data-testid="review-card-rating">{evaluation.rating}</p>
+                  </li>))
+            }
+          </ul>
         </form>
       </div>
     );
