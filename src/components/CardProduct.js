@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-// import Details from '../pages/Details';
-// import { getProductById } from '../services/api';
 
 class CardProduct extends React.Component {
   render() {
@@ -48,12 +46,6 @@ CardProduct.propTypes = {
   id: PropTypes.string,
   value: PropTypes.object,
   dataTestId: PropTypes.string,
-  // attributes: PropTypes.arrayOf,
-  // match: PropTypes.shape({
-  //   params: PropTypes.shape({
-  //     id: PropTypes.string,
-  //   }),
-  // }),
 }.isRequired;
 
 export default CardProduct;
