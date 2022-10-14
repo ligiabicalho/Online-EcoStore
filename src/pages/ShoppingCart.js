@@ -29,16 +29,13 @@ class ShoppingCart extends React.Component {
 
   handleQuantity = ({ target }) => {
     const shoppingCart = getShoppingCart();
-    console.log(shoppingCart);
     const { id, name } = target;
     const findProduct = shoppingCart.find((product) => product.id === id);
     if (name === 'increase') {
       findProduct.quantity += 1;
-      console.log(findProduct.quantity);
     }
     if (name === 'decrease') {
       findProduct.quantity -= 1;
-      console.log('segundo if');
     }
     saveShoppingCart(shoppingCart);
     this.setState({
