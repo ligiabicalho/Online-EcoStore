@@ -56,16 +56,20 @@ class ShoppingCart extends React.Component {
                   data-testid="shopping-cart-product-name"
                 >
                   <CardProduct
+                    dataTestId="shopping-cart-product-quantity"
                     title={ product.title }
                     thumbnail={ product.thumbnail }
                     price={ product.price }
                     id={ product.id }
+                    // handleIncrease={ this.handleIncrease(product) }
+                    // handleDecrease={ this.handleDecrease(product) }
                   />
                   <button
                     name="increase"
                     id={ product.id }
                     type="button"
                     data-testid="product-increase-quantity"
+                    onClick={ () => this.handleIncrease() }
                     onClick={ this.handleQuantity }
                   >
                     +
