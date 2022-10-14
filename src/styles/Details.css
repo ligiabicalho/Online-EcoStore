@@ -1,4 +1,4 @@
-/* Referncia https://codepen.io/neilpomerleau/pen/wzxzQM */
+/* Referência https://codepen.io/neilpomerleau/pen/wzxzQM */
 .rating {
   display: inline-block;
   font-size: 20px;
@@ -55,13 +55,10 @@
   color: black;
 }
 
-.rating:not( :hover ) label input:checked ~ .icon,
+.rating:not( :hover ) label input:checked ~ .icon {
+  color: gold;
+}
 
 .rating:hover label:hover input ~ .icon {
   color: gold;
 }
-
-/* .rating label input:focus:not( :checked ) ~ .icon:last-child {
-  color: black;
-  text-shadow: 0 5px 0 gold;
-} */
