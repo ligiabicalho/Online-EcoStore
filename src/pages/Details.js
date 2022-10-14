@@ -85,13 +85,20 @@ class Details extends React.Component {
     return (
       <div>
         <CardProduct
-          dataTestId="product-detail-add-to-cart"
           title={ result.title }
           thumbnail={ result.thumbnail }
           price={ result.price }
           id={ result.id }
-          handleAddCart={ () => this.handleAddCart(result) }
         />
+        <button
+          type="button"
+          name="addCart"
+          // value={ value }
+          data-testid="product-detail-add-to-cart"
+          onClick={ () => this.handleAddCart(result) }
+        >
+          Adicionar ao carrinho
+        </button>
         <ButtonShoppingCart />
         <form>
           <label htmlFor="email">

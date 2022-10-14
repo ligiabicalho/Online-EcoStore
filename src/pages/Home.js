@@ -1,9 +1,8 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import CardProduct from '../components/CardProduct';
-// import Details from './Details';
 import { addProduct, getShoppingCart, removeProduct } from '../services/localstorage';
 
 class Home extends React.Component {
@@ -24,8 +23,6 @@ class Home extends React.Component {
 
   handleSearchChange = ({ target }) => {
     const { value, name } = target;
-    console.log(value);
-    console.log(name);
     this.setState({
       [name]: value,
     });
@@ -36,8 +33,6 @@ class Home extends React.Component {
     if (search) {
       const request = await getProductsFromCategoryAndQuery(undefined, search);
       const { results } = request;
-      console.log(results);
-
       this.setState({
         results,
       });
@@ -47,14 +42,11 @@ class Home extends React.Component {
   handleAddCart = (result) => {
     const shoppingCart = getShoppingCart(); // retorna array de objetos
     const findProduct = shoppingCart.some((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
-    console.log(findProduct);
     if (!findProduct) {
       result.quantity = 1;
-      console.log('Primeiro if');
       addProduct(result);
     }
     if (findProduct) { // true: altera quantity
-      console.log('Segundo if');
       removeProduct(result);
       result.quantity += 1;
       addProduct(result);
@@ -125,13 +117,25 @@ class Home extends React.Component {
                     data-testid="product"
                   >
                     <CardProduct
-                      dataTestId="product-add-to-cart"
                       title={ result.title }
                       thumbnail={ result.thumbnail }
                       price={ result.price }
                       id={ result.id }
-                      handleAddCart={ () => this.handleAddCart(result) }
                     />
+                    <Link
+                      data-testid="product-detail-link"
+                      to={ `/details/${result.id}` }
+                    >
+                      Detalhes
+                    </Link>
+                    <button
+                      type="button"
+                      name="addCart"
+                      data-testid="product-add-to-cart"
+                      onClick={ () => this.handleAddCart(result) }
+                    >
+                      Adicionar ao carrinho
+                    </button>
                   </li>))}
               </ul>
             )
