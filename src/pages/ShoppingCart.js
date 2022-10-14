@@ -1,11 +1,15 @@
 import React from 'react';
 import CardProduct from '../components/CardProduct';
-import { getShoppingCart, addProduct, removeProduct } from '../services/localstorage';
+import { getShoppingCart, saveShoppingCart,
+  removeProduct } from '../services/localstorage';
 
 class ShoppingCart extends React.Component {
-  state = {
-    shoppingCart: [],
-  };
+  constructor() {
+    super();
+    this.state = {
+      shoppingCart: [],
+    };
+  }
 
   componentDidMount() {
     this.handleGetShoppingCart();
@@ -18,23 +22,25 @@ class ShoppingCart extends React.Component {
     });
   };
 
-  handleIncrease = (product) => {
-    removeProduct(product);
-    product.quantity += 1;
-    addProduct(product);
-    this.handleGetShoppingCart();
-  };
-
-  handleDecrease = (product) => {
-    removeProduct(product);
-    product.quantity -= 1;
-    addProduct(product);
-    this.handleGetShoppingCart();
-  };
-
   handleRemoveProduct = (product) => {
     removeProduct(product);
     this.handleGetShoppingCart();
+  };
+
+  handleQuantity = ({ target }) => {
+    const shoppingCart = getShoppingCart();
+    const { id, name } = target;
+    const findProduct = shoppingCart.find((product) => product.id === id);
+    if (name === 'increase') {
+      findProduct.quantity += 1;
+    }
+    if (name === 'decrease') {
+      findProduct.quantity -= 1;
+    }
+    saveShoppingCart(shoppingCart);
+    this.setState({
+      shoppingCart,
+    });
   };
 
   render() {
@@ -59,19 +65,24 @@ class ShoppingCart extends React.Component {
                     // handleDecrease={ this.handleDecrease(product) }
                   />
                   <button
+                    name="increase"
+                    id={ product.id }
                     type="button"
                     data-testid="product-increase-quantity"
                     onClick={ () => this.handleIncrease() }
+                    onClick={ this.handleQuantity }
                   >
                     +
                   </button>
                   <button
+                    name="decrease"
+                    id={ product.id }
                     type="button"
                     data-testid="product-decrease-quantity"
                     disabled={
                       (product.quantity === 1)
                     }
-                    onClick={ () => this.handleDecrease(product) }
+                    onClick={ this.handleQuantity }
                   >
                     -
                   </button>

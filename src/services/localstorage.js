@@ -3,7 +3,7 @@ if (!JSON.parse(localStorage.getItem('shopping_cart'))) {
 }
 const readShoppingCart = () => JSON.parse(localStorage.getItem('shopping_cart'));
 
-const saveShoppingCart = (shoppingCart) => localStorage
+export const saveShoppingCart = (shoppingCart) => localStorage
   .setItem('shopping_cart', JSON.stringify(shoppingCart));
 
 export const getShoppingCart = () => {
