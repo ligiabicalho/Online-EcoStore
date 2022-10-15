@@ -4,9 +4,21 @@ import CardProduct from '../components/CardProduct';
 import { getShoppingCart } from '../services/localstorage';
 
 class Checkout extends React.Component {
-  state = {
-    shoppingCart: [],
-  };
+  constructor() {
+    super();
+
+    this.state = {
+      shoppingCart: [],
+      validation: true,
+      name: '',
+      email: '',
+      cpf: '',
+      phone: '',
+      cep: '',
+      address: '',
+      payment: '',
+    };
+  }
 
   componentDidMount() {
     this.handleGetShoppingCart();
@@ -19,8 +31,54 @@ class Checkout extends React.Component {
     });
   };
 
+  handleOnChange = ({ target }) => {
+    const { id, value, name, type } = target;
+    if (type === 'radio') {
+      this.setState({
+        [name]: id,
+      });
+    }
+    if (type !== 'radio') {
+      this.setState({
+        [id]: value,
+      });
+    }
+  };
+
+  validationCheckout = () => {
+    const { name, email, cpf, phone, cep, address, payment } = this.state;
+
+    const cpfNumber = 11;
+    const cepNumber = 8;
+    const minPhone = 8;
+    const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
+    const validName = name.length > 0;
+    const validCpf = cpf.length === cpfNumber;
+    const validCep = cep.length === cepNumber;
+    const validAddress = address.length > 0;
+    const validPhone = phone.length >= minPhone;
+    const validPayment = payment.length > 0;
+
+    if (emailRegex.test(email)
+      && validAddress
+      && validName
+      && validCep
+      && validCpf
+      && validPhone
+      && validPayment) {
+      this.setState({
+        validation: true,
+      });
+    } else {
+      this.setState({
+        validation: false,
+      });
+    }
+    localStorage.setItem('shopping_cart', JSON.stringify([]));
+  };
+
   render() {
-    const { shoppingCart } = this.state;
+    const { shoppingCart, validation } = this.state;
     return (
       <>
         <p>Revise seus produtos</p>
@@ -48,12 +106,13 @@ class Checkout extends React.Component {
           return Number(acc);
         }, [])}
         <br />
-        <label htmlFor="full-name">
+        <label htmlFor="name">
           Nome completo
           <input
-            id="full-name"
+            id="name"
             type="text"
             data-testid="checkout-fullname"
+            onChange={ this.handleOnChange }
             required
           />
         </label>
@@ -63,15 +122,17 @@ class Checkout extends React.Component {
             id="email"
             type="email"
             data-testid="checkout-email"
+            onChange={ this.handleOnChange }
             required
           />
         </label>
-        <label htmlFor="document-cpf">
+        <label htmlFor="cpf">
           CPF
           <input
-            id="document-cpf"
-            type="number"
+            id="cpf"
+            type="text"
             data-testid="checkout-cpf"
+            onChange={ this.handleOnChange }
             required
           />
         </label>
@@ -79,8 +140,9 @@ class Checkout extends React.Component {
           Telefone
           <input
             id="phone"
-            type="number"
+            type="text"
             data-testid="checkout-phone"
+            onChange={ this.handleOnChange }
             required
           />
         </label>
@@ -88,8 +150,9 @@ class Checkout extends React.Component {
           CEP
           <input
             id="cep"
-            type="number"
+            type="text"
             data-testid="checkout-cep"
+            onChange={ this.handleOnChange }
             required
           />
         </label>
@@ -99,6 +162,8 @@ class Checkout extends React.Component {
             id="address"
             type="text"
             data-testid="checkout-address"
+            onChange={ this.handleOnChange }
+            placeholder="Nome da Rua, Bairro - Número"
             required
           />
         </label>
@@ -110,6 +175,7 @@ class Checkout extends React.Component {
               name="payment"
               type="radio"
               data-testid="ticket-payment"
+              onChange={ this.handleOnChange }
             />
             Boleto
           </label>
@@ -119,6 +185,7 @@ class Checkout extends React.Component {
               name="payment"
               type="radio"
               data-testid="visa-payment"
+              onChange={ this.handleOnChange }
             />
             Visa
           </label>
@@ -128,6 +195,7 @@ class Checkout extends React.Component {
               name="payment"
               type="radio"
               data-testid="master-payment"
+              onChange={ this.handleOnChange }
             />
             Mastercard
           </label>
@@ -137,6 +205,7 @@ class Checkout extends React.Component {
               name="payment"
               type="radio"
               data-testid="elo-payment"
+              onChange={ this.handleOnChange }
             />
             Elo
           </label>
@@ -147,11 +216,12 @@ class Checkout extends React.Component {
           <button
             data-testid="checkout-btn"
             type="button"
-            onClick={ () => localStorage.setItem('shopping_cart', JSON.stringify([])) }
+            onClick={ () => this.validationCheckout() }
           >
             Comprar
           </button>
         </Link>
+        {!validation && <p data-testid="error-msg">Campos inválidos</p>}
       </>
     );
   }
