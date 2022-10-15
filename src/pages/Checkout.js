@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import CardProduct from '../components/CardProduct';
 import { getShoppingCart } from '../services/localstorage';
 
@@ -9,7 +9,6 @@ class Checkout extends React.Component {
 
     this.state = {
       shoppingCart: [],
-      validation: true,
       name: '',
       email: '',
       cpf: '',
@@ -68,13 +67,12 @@ class Checkout extends React.Component {
       && validPayment) {
       this.setState({
         validation: true,
-      });
+      }, () => localStorage.setItem('shopping_cart', JSON.stringify([])));
     } else {
       this.setState({
         validation: false,
       });
     }
-    localStorage.setItem('shopping_cart', JSON.stringify([]));
   };
 
   render() {
@@ -210,18 +208,16 @@ class Checkout extends React.Component {
             Elo
           </label>
         </fieldset>
-        <Link
-          to="/"
+        <button
+          data-testid="checkout-btn"
+          type="button"
+          onClick={ () => this.validationCheckout() }
         >
-          <button
-            data-testid="checkout-btn"
-            type="button"
-            onClick={ () => this.validationCheckout() }
-          >
-            Comprar
-          </button>
-        </Link>
-        {!validation && <p data-testid="error-msg">Campos inválidos</p>}
+          Comprar
+        </button>
+        {validation
+          ? <Redirect to="/" />
+          : <p data-testid="error-msg">Campos inválidos</p>}
       </>
     );
   }
