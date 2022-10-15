@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import CardProduct from '../components/CardProduct';
-import { addProduct, getShoppingCart, removeProduct } from '../services/localstorage';
+import { addProduct, getShoppingCart,
+  removeProduct, saveShoppingCart } from '../services/localstorage';
 
 class Home extends React.Component {
   state = {
@@ -41,15 +42,14 @@ class Home extends React.Component {
 
   handleAddCart = (result) => {
     const shoppingCart = getShoppingCart(); // retorna array de objetos
-    const findProduct = shoppingCart.some((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
+    const findProduct = shoppingCart.find((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
     if (!findProduct) {
       result.quantity = 1;
       addProduct(result);
     }
     if (findProduct) { // true: altera quantity
-      removeProduct(result);
-      result.quantity += 1;
-      addProduct(result);
+      findProduct.quantity += 1;
+      saveShoppingCart(shoppingCart);
     }
   };
 

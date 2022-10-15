@@ -32,9 +32,9 @@ class Details extends React.Component {
   };
 
   handleAddCart = (result) => {
+    console.log(result);
     const shoppingCart = getShoppingCart(); // retorna array de objetos
     const findProduct = shoppingCart.some((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
-    console.log(findProduct);
     if (!findProduct) {
       result.quantity = 1;
       addProduct(result);
@@ -56,7 +56,6 @@ class Details extends React.Component {
   validationInputs = (productId) => {
     const { email, text, rating } = this.state;
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
-    // const emailRegex = /@.*\./i;
     const validRating = rating > 0;
     if (emailRegex.test(email) && validRating) {
       const evaluation = {
@@ -81,7 +80,6 @@ class Details extends React.Component {
 
   render() {
     const { result, validation, email, text, evaluationList } = this.state;
-    // console.log(email);
     return (
       <div>
         <CardProduct
@@ -90,31 +88,45 @@ class Details extends React.Component {
           price={ result.price }
           id={ result.id }
         />
+        <p>
+          Marca:
+          {' '}
+          {result.attributes?.find((att) => att.id === 'BRAND').value_name}
+        </p>
+        <br />
         <button
           type="button"
           name="addCart"
-          // value={ value }
           data-testid="product-detail-add-to-cart"
           onClick={ () => this.handleAddCart(result) }
         >
           Adicionar ao carrinho
         </button>
         <ButtonShoppingCart />
+        <br />
+        <div className="product-pictures">
+          {result.pictures?.map((pic, i) => (<img
+            key={ i }
+            src={ pic.secure_url }
+            alt={ pic.id }
+          />))}
+        </div>
         <form>
+          <h3>Opinião do Produto</h3>
           <label htmlFor="email">
-            Digite seu e-mail:
             <input
               id="email"
               type="email"
               name="email"
               value={ email }
-              placeholder="digite seu e-mail"
+              placeholder="Digite seu e-mail"
               data-testid="product-detail-email"
               onChange={ this.handleOnChange }
               required
             />
           </label>
           <br />
+          <span>Nota:</span>
           <div className="rating">
             <label htmlFor="one" data-testid="1-rating">
               <input
@@ -184,14 +196,14 @@ class Details extends React.Component {
           </div>
           <br />
           <label htmlFor="evaluation">
-            Dê a sua avaliação sobre o produto:
-            <input
+            <textarea
+              data-testid="product-detail-evaluation"
               id="evaluation"
-              type="textarea"
               name="text"
               value={ text }
-              data-testid="product-detail-evaluation"
-              placeholder="digite sua avaliação"
+              rows="4"
+              cols="50"
+              placeholder="Deixe seu comentário (opcional)"
               onChange={ this.handleOnChange }
             />
           </label>
@@ -206,13 +218,12 @@ class Details extends React.Component {
           {!validation && <p data-testid="error-msg">Campos inválidos</p>}
           <ul>
             {
-              (evaluationList)
-                && evaluationList.map((evaluation, i) => (
-                  <li key={ i }>
-                    <p data-testid="review-card-email">{evaluation.email}</p>
-                    <p data-testid="review-card-evaluation">{evaluation.text}</p>
-                    <p data-testid="review-card-rating">{evaluation.rating}</p>
-                  </li>))
+              evaluationList?.map((evaluation, i) => (
+                <li key={ i }>
+                  <p data-testid="review-card-email">{evaluation.email}</p>
+                  <p data-testid="review-card-evaluation">{evaluation.text}</p>
+                  <p data-testid="review-card-rating">{evaluation.rating}</p>
+                </li>))
             }
           </ul>
         </form>

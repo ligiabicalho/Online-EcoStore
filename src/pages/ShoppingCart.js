@@ -48,7 +48,7 @@ class ShoppingCart extends React.Component {
     const { shoppingCart } = this.state;
     return (
       <div className="shopping-cart">
-        { (shoppingCart.length > 0)
+        { (shoppingCart?.length > 0) // a interrogação valida se não é undefined, evitando que o código quebre.
           ? (
             <>
               <ul>

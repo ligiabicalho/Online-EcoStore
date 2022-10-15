@@ -51,7 +51,7 @@ class Checkout extends React.Component {
     const cepNumber = 8;
     const minPhone = 8;
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
-    const validName = name.length > 0;
+    const validName = name?.length > 0;
     const validCpf = cpf.length === cpfNumber;
     const validCep = cep.length === cepNumber;
     const validAddress = address.length > 0;
@@ -81,7 +81,7 @@ class Checkout extends React.Component {
       <>
         <p>Revise seus produtos</p>
         <ul>
-          {shoppingCart.map((product, i) => (
+          {shoppingCart?.map((product, i) => (
             <li
               key={ i }
               data-testid="shopping-cart-product-name"
@@ -208,8 +208,9 @@ class Checkout extends React.Component {
             Elo
           </label>
         </fieldset>
-        {validation === undefined && <p>Preencha todos os campos</p>}
-        {validation === false && <p data-testid="error-msg">Campos inválidos</p>}
+        {/* {validation === undefined && <p>Preencha todos os campos</p>} */}
+        {validation !== undefined
+        && validation === false && <p data-testid="error-msg">Campos inválidos</p>}
         {validation === true && <Redirect to="/" />}
         <button
           data-testid="checkout-btn"
