@@ -208,16 +208,16 @@ class Checkout extends React.Component {
             Elo
           </label>
         </fieldset>
+        {validation === undefined && <p>Preencha todos os campos</p>}
+        {validation === false && <p data-testid="error-msg">Campos inválidos</p>}
+        {validation === true && <Redirect to="/" />}
         <button
           data-testid="checkout-btn"
           type="button"
-          onClick={ () => this.validationCheckout() }
+          onClick={ this.validationCheckout }
         >
-          Comprar
+          Comprar!
         </button>
-        {validation
-          ? <Redirect to="/" />
-          : <p data-testid="error-msg">Campos inválidos</p>}
       </>
     );
   }
