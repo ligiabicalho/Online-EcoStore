@@ -4,7 +4,7 @@ import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getProductById } from '../services/api';
 import CardProduct from '../components/CardProduct';
 import { addEvaluation, addProduct,
-  getEvaluationList, getShoppingCart, removeProduct } from '../services/localstorage';
+  getEvaluationList, getShoppingCart, saveShoppingCart } from '../services/localstorage';
 import '../styles/Details.css';
 
 class Details extends React.Component {
@@ -19,7 +19,15 @@ class Details extends React.Component {
 
   componentDidMount() {
     this.renderProductandEvaluation();
+    this.handleGetShoppingCart();
   }
+
+  handleGetShoppingCart = () => {
+    const shoppingCart = getShoppingCart();
+    this.setState({
+      shoppingCart,
+    });
+  };
 
   renderProductandEvaluation = async () => {
     const { match: { params: { id } } } = this.props;
@@ -32,17 +40,19 @@ class Details extends React.Component {
   };
 
   handleAddCart = (result) => {
-    const shoppingCart = getShoppingCart(); // retorna array de objetos
-    const findProduct = shoppingCart.some((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
+    const shoppingCart = getShoppingCart();
+    const findProduct = shoppingCart.find((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
     if (!findProduct) {
       result.quantity = 1;
       addProduct(result);
     }
-    if (findProduct) { // true: altera quantity
-      removeProduct(result);
-      result.quantity += 1;
-      addProduct(result);
+    if (findProduct) {
+      findProduct.quantity += 1;
+      saveShoppingCart(shoppingCart);
     }
+    this.setState({
+      shoppingCart: getShoppingCart(),
+    });
   };
 
   handleOnChange = ({ target }) => {
@@ -78,9 +88,10 @@ class Details extends React.Component {
   };
 
   render() {
-    const { result, validation, email, text, evaluationList } = this.state;
+    const { result, validation, email, text, evaluationList, shoppingCart } = this.state;
     return (
       <div>
+        <ButtonShoppingCart shoppingCart={ shoppingCart } />
         <CardProduct
           title={ result.title }
           thumbnail={ result.thumbnail }
@@ -101,7 +112,6 @@ class Details extends React.Component {
         >
           Adicionar ao carrinho
         </button>
-        <ButtonShoppingCart />
         <br />
         <div className="product-pictures">
           {result.pictures?.map((pic, i) => (<img

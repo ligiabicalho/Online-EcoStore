@@ -8,6 +8,7 @@ import { addProduct, getShoppingCart, saveShoppingCart } from '../services/local
 class Home extends React.Component {
   state = {
     listCategories: [],
+    shoppingCart: [],
   };
 
   componentDidMount() {
@@ -48,18 +49,18 @@ class Home extends React.Component {
   };
 
   handleAddCart = (result) => {
-    const shoppingCart = getShoppingCart(); // retorna array de objetos
+    const shoppingCart = getShoppingCart();
     const findProduct = shoppingCart.find((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
     if (!findProduct) {
       result.quantity = 1;
       addProduct(result);
     }
-    if (findProduct) { // true: altera quantity
+    if (findProduct) {
       findProduct.quantity += 1;
       saveShoppingCart(shoppingCart);
     }
     this.setState({
-      shoppingCart,
+      shoppingCart: getShoppingCart(),
     });
   };
 
@@ -74,16 +75,10 @@ class Home extends React.Component {
   };
 
   render() {
-    const { listCategories, results } = this.state;
+    const { listCategories, results, shoppingCart } = this.state;
     return (
       <>
-        <ButtonShoppingCart />
-        {/* <span>
-          {shoppingCart?.reduce((acc, curr) => {
-            acc += curr.quantity;
-            return Number(acc);
-          }, 0)}
-        </span> */}
+        <ButtonShoppingCart shoppingCart={ shoppingCart } />
         <label htmlFor="search">
           <p
             data-testid="home-initial-message"
