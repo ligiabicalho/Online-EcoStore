@@ -67,11 +67,7 @@ class Details extends React.Component {
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
     const validRating = rating > 0;
     if (emailRegex.test(email) && validRating) {
-      const evaluation = {
-        email,
-        text,
-        rating,
-      };
+      const evaluation = { email, text, rating };
       addEvaluation(productId, evaluation);
       this.setState({
         validation: true,
@@ -89,6 +85,7 @@ class Details extends React.Component {
 
   render() {
     const { result, validation, email, text, evaluationList, shoppingCart } = this.state;
+    console.log(result);
     return (
       <div>
         <ButtonShoppingCart shoppingCart={ shoppingCart } />
@@ -99,9 +96,11 @@ class Details extends React.Component {
           id={ result.id }
         />
         <p>
-          Marca:
-          {' '}
-          {result.attributes?.find((att) => att.id === 'BRAND').value_name}
+          {result.attributes?.some((att) => att.id === 'BRAND')
+          && `Marca: ${result.attributes?.find((att) => att.id === 'BRAND').value_name}`}
+          {result.attributes?.some((att) => att.id === 'AUTHOR')
+            && `Autor: 
+            ${result.attributes?.find((att) => att.id === 'AUTHOR').value_name}`}
         </p>
         <br />
         <button
