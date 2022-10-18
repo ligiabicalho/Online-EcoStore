@@ -240,7 +240,6 @@ class Details extends React.Component {
     );
   }
 }
-
 Details.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -248,5 +247,4 @@ Details.propTypes = {
     }),
   }),
 }.isRequired;
-
 export default Details;
