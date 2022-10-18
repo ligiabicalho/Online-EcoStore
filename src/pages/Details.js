@@ -32,7 +32,6 @@ class Details extends React.Component {
   };
 
   handleAddCart = (result) => {
-    console.log(result);
     const shoppingCart = getShoppingCart(); // retorna array de objetos
     const findProduct = shoppingCart.some((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
     if (!findProduct) {

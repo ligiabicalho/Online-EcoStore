@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import CardProduct from '../components/CardProduct';
-import { addProduct, getShoppingCart,
-  removeProduct, saveShoppingCart } from '../services/localstorage';
+import { addProduct, getShoppingCart, saveShoppingCart } from '../services/localstorage';
 
 class Home extends React.Component {
   state = {
@@ -13,12 +12,20 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.handleGetCategories();
+    this.handleGetShoppingCart();
   }
 
   handleGetCategories = async () => {
     const listCategories = await getCategories();
     this.setState({
       listCategories,
+    });
+  };
+
+  handleGetShoppingCart = () => {
+    const shoppingCart = getShoppingCart();
+    this.setState({
+      shoppingCart,
     });
   };
 
@@ -51,6 +58,9 @@ class Home extends React.Component {
       findProduct.quantity += 1;
       saveShoppingCart(shoppingCart);
     }
+    this.setState({
+      shoppingCart,
+    });
   };
 
   onClickCategory = async ({ target }) => {
@@ -67,6 +77,13 @@ class Home extends React.Component {
     const { listCategories, results } = this.state;
     return (
       <>
+        <ButtonShoppingCart />
+        {/* <span>
+          {shoppingCart?.reduce((acc, curr) => {
+            acc += curr.quantity;
+            return Number(acc);
+          }, 0)}
+        </span> */}
         <label htmlFor="search">
           <p
             data-testid="home-initial-message"
@@ -88,8 +105,6 @@ class Home extends React.Component {
             Pesquisar
           </button>
         </label>
-        <br />
-        <ButtonShoppingCart />
         <aside>
           {listCategories.map((category) => (
             <li key={ category.id }>
