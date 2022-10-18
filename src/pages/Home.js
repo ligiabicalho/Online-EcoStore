@@ -131,6 +131,7 @@ class Home extends React.Component {
                       thumbnail={ result.thumbnail }
                       price={ result.price }
                       id={ result.id }
+                      shipping={ result.shipping.free_shipping }
                     />
                     <Link
                       data-testid="product-detail-link"
