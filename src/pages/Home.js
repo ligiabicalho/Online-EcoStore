@@ -9,6 +9,9 @@ class Home extends React.Component {
   state = {
     listCategories: [],
     shoppingCart: [],
+    results: [],
+    categoryId: undefined,
+    search: undefined,
   };
 
   componentDidMount() {
@@ -38,23 +41,20 @@ class Home extends React.Component {
   };
 
   onSearchClick = async () => {
-    const { search } = this.state;
-    if (search) {
-      const request = await getProductsFromCategoryAndQuery(undefined, search);
-      const { results } = request;
-      console.log(results);
-      this.setState({
-        results,
-      });
-    }
+    const { search, categoryId } = this.state;
+    const request = await getProductsFromCategoryAndQuery(categoryId, search);
+    const { results } = request;
+    this.setState({
+      results,
+    });
   };
 
-  handleAddCart = (result) => {
+  handleAddCart = (product) => {
     const shoppingCart = getShoppingCart();
-    const findProduct = shoppingCart.find((product) => product.id === result.id); // Se ja estiver no carrinho, retorna o produto/true.
+    const findProduct = shoppingCart.find((cartProduct) => cartProduct.id === product.id); // Se ja estiver no carrinho, retorna o produto/true.
     if (!findProduct) {
-      result.quantity = 1;
-      addProduct(result);
+      product.quantity = 1;
+      addProduct(product);
     }
     if (findProduct) {
       findProduct.quantity += 1;
@@ -65,10 +65,11 @@ class Home extends React.Component {
     });
   };
 
-  onClickCategory = async ({ target }) => {
-    const { value, name } = target;
+  onClickCategory = async ({ target: { value, name } }) => {
     this.setState({ [name]: value });
-    const request = await getProductsFromCategoryAndQuery(value);
+
+    const { search } = this.state;
+    const request = await getProductsFromCategoryAndQuery(value, search);
     const { results } = request;
     this.setState({
       results,
@@ -89,6 +90,7 @@ class Home extends React.Component {
               id="search"
               name="search"
               placeholder="Pesquise por qualquer termo"
+              value={ search }
               onChange={ this.handleSearchChange }
             />
             <button
@@ -105,25 +107,36 @@ class Home extends React.Component {
           </p>
         </div>
         <div className="container">
-          <aside>
-            <div className="categories-list">
-              {listCategories.map((category) => (
-                <label
-                  htmlFor={ category.id }
-                  key={ category.id }
-                >
-                  <input
-                    id={ category.id }
-                    value={ category.id }
-                    name="category"
-                    type="radio"
-                    data-testid="category"
-                    onClick={ this.onClickCategory }
-                  />
-                  {category.name}
-                </label>
-              ))}
-            </div>
+          <aside className="categories-list">
+            <label
+              htmlFor="clearCategory"
+            >
+              <input
+                data-testid="category"
+                id="clearCategory"
+                name="categoryId"
+                value=""
+                type="radio"
+                onClick={ this.onClickCategory }
+              />
+              Limpar categorias
+            </label>
+            {listCategories.map((category) => (
+              <label
+                htmlFor={ category.id }
+                key={ category.id }
+              >
+                <input
+                  data-testid="category"
+                  id={ category.id }
+                  name="categoryId"
+                  value={ category.id }
+                  type="radio"
+                  onClick={ this.onClickCategory }
+                />
+                {category.name}
+              </label>
+            ))}
           </aside>
           <section className="result-content">
             {results?.length === 0
