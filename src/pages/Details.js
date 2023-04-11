@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getProductById } from '../services/api';
 import CardProduct from '../components/CardProduct';
+import Header from '../components/Header';
 import { addEvaluation, addProduct,
   getEvaluationList, getShoppingCart, saveShoppingCart } from '../services/localstorage';
 import '../styles/Details.css';
+import '../styles/FormsRating.css';
 
 class Details extends React.Component {
   state = {
@@ -87,37 +88,27 @@ class Details extends React.Component {
     const { result, validation, email, text, evaluationList, shoppingCart } = this.state;
     console.log(result);
     return (
-      <div>
-        <ButtonShoppingCart shoppingCart={ shoppingCart } />
-        <CardProduct
-          title={ result.title }
-          thumbnail={ result.thumbnail }
-          price={ result.price }
-          id={ result.id }
-        />
-        <p>
-          {result.attributes?.some((att) => att.id === 'BRAND')
-          && `Marca: ${result.attributes?.find((att) => att.id === 'BRAND').value_name}`}
-          {result.attributes?.some((att) => att.id === 'AUTHOR')
-            && `Autor: 
-            ${result.attributes?.find((att) => att.id === 'AUTHOR').value_name}`}
-        </p>
-        <br />
-        <button
-          type="button"
-          name="addCart"
-          data-testid="product-detail-add-to-cart"
-          onClick={ () => this.handleAddCart(result) }
-        >
-          Adicionar ao carrinho
-        </button>
-        <br />
-        <div className="product-pictures">
-          {result.pictures?.map((pic, i) => (<img
-            key={ i }
-            src={ pic.secure_url }
-            alt={ pic.id }
-          />))}
+      <div className="pag-details">
+        <Header shoppingCart={ shoppingCart } />
+        <div className="product-details">
+          <div className="card-product-details">
+            <CardProduct
+              title={ result.title }
+              thumbnail={ result.thumbnail }
+              price={ result.price }
+              id={ result.id }
+              dataTestId="product-detail-add-to-cart"
+              handleAddCart={ () => this.handleAddCart(result) }
+              attributes={ result.attributes }
+            />
+          </div>
+          <div className="product-pictures">
+            {result.pictures?.map((pic, i) => (<img
+              key={ i }
+              src={ pic.secure_url }
+              alt={ pic.id }
+            />))}
+          </div>
         </div>
         <form>
           <h3>Opinião do Produto</h3>

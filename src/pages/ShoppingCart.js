@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 import CardProduct from '../components/CardProduct';
 import { getShoppingCart, saveShoppingCart,
   removeProduct } from '../services/localstorage';
@@ -48,6 +49,7 @@ class ShoppingCart extends React.Component {
     const { shoppingCart } = this.state;
     return (
       <div className="shopping-cart">
+        <Header shoppingCart={ shoppingCart } />
         { (shoppingCart?.length > 0) // a interrogação valida se não é undefined, evitando que o código quebre.
           ? (
             <>
@@ -55,39 +57,52 @@ class ShoppingCart extends React.Component {
                 {shoppingCart.map((product, i) => (
                   <li
                     key={ i }
+                    className="product-card-shopping-cart"
                     data-testid="shopping-cart-product-name"
                   >
                     <CardProduct
-                      dataTestId="shopping-cart-product-quantity"
                       title={ product.title }
                       thumbnail={ product.thumbnail }
-                      price={ product.price }
+                      price={ product.price * product.quantity }
                       id={ product.id }
+                      attributes={ product.attributes }
                     />
-                    <button
-                      name="increase"
-                      id={ product.id }
-                      type="button"
-                      data-testid="product-increase-quantity"
-                      disabled={
-                        (product.quantity === product.available_quantity)
-                      }
-                      onClick={ this.handleQuantity }
-                    >
-                      +
-                    </button>
-                    <button
-                      name="decrease"
-                      id={ product.id }
-                      type="button"
-                      data-testid="product-decrease-quantity"
-                      disabled={
-                        (product.quantity === 1)
-                      }
-                      onClick={ this.handleQuantity }
-                    >
-                      -
-                    </button>
+                    <div className="quantity-btns">
+
+                      <button
+                        className="increase-btn"
+                        name="increase"
+                        id={ product.id }
+                        type="button"
+                        data-testid="product-increase-quantity"
+                        disabled={
+                          (product.quantity === product.available_quantity)
+                        }
+                        onClick={ this.handleQuantity }
+                      >
+                        +
+                      </button>
+                      <span
+                        className="product-quantity"
+                        data-testid="shopping-cart-product-quantity"
+                      >
+                        { product.quantity }
+                      </span>
+                      <button
+                        className="decrease-btn"
+                        name="decrease"
+                        id={ product.id }
+                        type="button"
+                        data-testid="product-decrease-quantity"
+                        disabled={
+                          (product.quantity === 1)
+                        }
+                        onClick={ this.handleQuantity }
+                      >
+                        -
+                      </button>
+                      <br />
+                    </div>
                     <button
                       type="button"
                       data-testid="remove-product"
@@ -95,11 +110,6 @@ class ShoppingCart extends React.Component {
                     >
                       Remover Produto
                     </button>
-                    <p
-                      data-testid="shopping-cart-product-quantity"
-                    >
-                      { product.quantity }
-                    </p>
                   </li>))}
               </ul>
               <Link to="/checkout">

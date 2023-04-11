@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
-import Details from './pages/Details';
 import Home from './pages/Home';
+import Details from './pages/Details';
 import ShoppingCart from './pages/ShoppingCart';
 import Checkout from './pages/Checkout';
 

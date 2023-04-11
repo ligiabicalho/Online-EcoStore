@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import ButtonShoppingCart from '../components/ButtonShoppingCart';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import CardProduct from '../components/CardProduct';
+import Header from '../components/Header';
 import { addProduct, getShoppingCart, saveShoppingCart } from '../services/localstorage';
+import '../styles/Home.css';
 
 class Home extends React.Component {
   state = {
@@ -42,6 +42,7 @@ class Home extends React.Component {
     if (search) {
       const request = await getProductsFromCategoryAndQuery(undefined, search);
       const { results } = request;
+      console.log(results);
       this.setState({
         results,
       });
@@ -75,83 +76,78 @@ class Home extends React.Component {
   };
 
   render() {
-    const { listCategories, results, shoppingCart } = this.state;
+    const { listCategories, results, shoppingCart, search } = this.state;
     return (
       <>
-        <ButtonShoppingCart shoppingCart={ shoppingCart } />
-        <label htmlFor="search">
-          <p
-            data-testid="home-initial-message"
-          >
+        <Header shoppingCart={ shoppingCart } />
+        <div className="search">
+          <label htmlFor="search">
+            <input
+              className="search-input"
+              data-testid="query-input"
+              type="search"
+              id="search"
+              name="search"
+              placeholder="Pesquise por qualquer termo"
+              onChange={ this.handleSearchChange }
+            />
+            <button
+              className="search-btn"
+              type="button"
+              data-testid="query-button"
+              onClick={ this.onSearchClick }
+            >
+              Pesquisar
+            </button>
+          </label>
+          <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>
-          <input
-            data-testid="query-input"
-            type="text"
-            id="search"
-            name="search"
-            onChange={ this.handleSearchChange }
-          />
-          <button
-            type="button"
-            data-testid="query-button"
-            onClick={ this.onSearchClick }
-          >
-            Pesquisar
-          </button>
-        </label>
-        <aside>
-          {listCategories.map((category) => (
-            <li key={ category.id }>
-              <label htmlFor={ category.id }>
-                <input
-                  id={ category.id }
-                  value={ category.id }
-                  name="category"
-                  type="radio"
-                  data-testid="category"
-                  onClick={ this.onClickCategory }
-                />
-                {category.name}
-              </label>
-            </li>
-          ))}
-        </aside>
-        <section className="result-content">
-          { results !== undefined
-            ? (
-              <ul>
-                {results.map((result) => (
-                  <li
-                    key={ result.id }
-                    data-testid="product"
-                  >
-                    <CardProduct
-                      title={ result.title }
-                      thumbnail={ result.thumbnail }
-                      price={ result.price }
-                      id={ result.id }
-                      shipping={ result.shipping.free_shipping }
-                    />
-                    <Link
-                      data-testid="product-detail-link"
-                      to={ `/details/${result.id}` }
-                    >
-                      Detalhes
-                    </Link>
-                    <button
-                      type="button"
-                      name="addCart"
-                      data-testid="product-add-to-cart"
-                      onClick={ () => this.handleAddCart(result) }
-                    >
-                      Adicionar ao carrinho
-                    </button>
-                  </li>))}
-              </ul>
-            )
-            : <p>Nenhum produto foi encontrado</p>}
-        </section>
+        </div>
+        <div className="container">
+          <aside>
+            <div className="categories-list">
+              {listCategories.map((category) => (
+                <label
+                  htmlFor={ category.id }
+                  key={ category.id }
+                >
+                  <input
+                    id={ category.id }
+                    value={ category.id }
+                    name="category"
+                    type="radio"
+                    data-testid="category"
+                    onClick={ this.onClickCategory }
+                  />
+                  {category.name}
+                </label>
+              ))}
+            </div>
+          </aside>
+          <section className="result-content">
+            {results?.length === 0
+              && <p className="no-result">Nenhum produto foi encontrado</p>}
+            <ul className="products-list">
+              {results?.map((result) => (
+                <li
+                  key={ result.id }
+                  data-testid="product"
+                >
+                  <CardProduct
+                    title={ result.title }
+                    thumbnail={ result.thumbnail }
+                    price={ result.price }
+                    id={ result.id }
+                    shipping={ result.shipping.free_shipping }
+                    dataTestId="product-add-to-cart"
+                    linkDetails
+                    handleAddCart={ () => this.handleAddCart(result) }
+                  />
+                </li>))}
+            </ul>
+          </section>
+        </div>
       </>
 
     );

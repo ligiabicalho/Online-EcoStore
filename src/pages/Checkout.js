@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import Header from '../components/Header';
 import CardProduct from '../components/CardProduct';
 import { getShoppingCart } from '../services/localstorage';
 
@@ -79,6 +80,7 @@ class Checkout extends React.Component {
     const { shoppingCart, validation } = this.state;
     return (
       <>
+        <Header shoppingCart={ shoppingCart } />
         <p>Revise seus produtos</p>
         <ul>
           {shoppingCart?.map((product, i) => (
