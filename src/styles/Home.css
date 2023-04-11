@@ -26,12 +26,17 @@
 .categories-list {
   display: flex;
   flex-direction: column;
-  width: 221.31px;
+}
+
+.categories-list label {
+  width: 221.4px;
 }
 
 li {
   list-style-type: none;
 }
+
+
 
 /* CSS HEX
 --cultured: #f4f4f4ff;

@@ -21,6 +21,11 @@
   width: 150px;
 }
 
+.card-product img {
+  height: 90px;
+  width: 90px;
+}
+
 .addCart {
   align-self: center;
 }
