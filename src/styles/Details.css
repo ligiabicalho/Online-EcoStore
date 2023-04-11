@@ -1,64 +1,18 @@
-/* Referência https://codepen.io/neilpomerleau/pen/wzxzQM */
-.rating {
-  display: inline-block;
-  font-size: 20px;
-  height: 50px;
-  line-height: 50px;
-  position: relative;
+.pag-details {
 }
 
-.rating label {
-  cursor: pointer;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
+.product-details {
+  display: flex;
+  justify-content: space-around;
 }
 
-.rating label:last-child {
-  position: static;
+.product-pictures {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 4px;
 }
 
-.rating label:nth-child( 1 ) {
-  z-index: 5;
-}
-
-.rating label:nth-child( 2 ) {
-  z-index: 4;
-}
-
-.rating label:nth-child( 3 ) {
-  z-index: 3;
-}
-
-.rating label:nth-child( 4 ) {
-  z-index: 2;
-}
-
-.rating label:nth-child( 5 ) {
-  z-index: 1;
-}
-
-.rating label input {
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-}
-
-.rating label .icon {
-  color: transparent;
-  float: left;
-}
-
-.rating label:last-child .icon {
-  color: black;
-}
-
-.rating:not( :hover ) label input:checked ~ .icon {
-  color: gold;
-}
-
-.rating:hover label:hover input ~ .icon {
-  color: gold;
+.product-pictures img {
+  margin: 4px;
 }

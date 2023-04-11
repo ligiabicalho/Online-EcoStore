@@ -1,0 +1,26 @@
+.products-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.products-list li {
+  align-content: center;
+  align-items: center;
+  list-style-type: none;
+
+}
+
+.card-product {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  justify-content: space-between;
+  margin: 8px;
+  text-align: center;
+  width: 150px;
+}
+
+.addCart {
+  align-self: center;
+}

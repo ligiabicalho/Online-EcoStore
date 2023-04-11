@@ -1,0 +1,51 @@
+.search {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.search p {
+  margin: 4px 0 2px;
+}
+
+.search-input {
+  width: 300px;
+}
+
+.search-btn {
+  margin: 2px 2px 4px;
+}
+
+.container {
+  display: flex;
+  margin-top: 16px;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  width: 221.31px;
+}
+
+li {
+  list-style-type: none;
+}
+
+/* CSS HEX
+--cultured: #f4f4f4ff;
+--green-pantone: #27af4cff;
+--ao-english: #208031ff;
+--indigo-dye: #0f3f5bff;
+--gunmetal: #033242ff;
+-
+--indigo-dye: #133d56ff;
+--dark-electric-blue: #3d5b6fff;
+--silver-sand: #b3bfc6ff;
+--cultured: #f3f3f6ff;
+--dark-sea-green: #84c88cff;
+--green-pigment: #39a551ff;
+--forest-green-web: #218b3cff;
+
+*/
